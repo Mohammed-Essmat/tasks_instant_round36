@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:product_list_screen/features/products/presentation/cubit/jobs_cubit.dart';
+import 'package:product_list_screen/features/products/presentation/cubit/products_cubit.dart';
+import 'package:product_list_screen/features/products/presentation/widgets/products_empty.dart';
 import 'package:product_list_screen/features/products/presentation/widgets/products_failure.dart';
+import 'package:product_list_screen/features/products/presentation/widgets/products_list.dart';
 import 'package:product_list_screen/features/products/presentation/widgets/products_shimmer.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -16,7 +18,7 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<JobsCubit>().getProducts();
+    context.read<ProductsCubit>().getProducts();
   }
   @override
   Widget build(BuildContext context) {
@@ -32,14 +34,18 @@ class _ProductScreenState extends State<ProductScreen> {
         title: Text('Products'),
       ),
 
-      body: BlocBuilder<JobsCubit, JobsState>(
+      body: BlocBuilder<ProductsCubit, ProductsState>(
         builder: (context, state) {
           switch (state) {
-            case JobsInitialState():
+            case ProductsInitial():
               return const Center(child: CircularProgressIndicator());
-            case JobsLoadingState():
+            case ProductsLoadingState():
               return const ProductShimmer();
-            case JobsFailureState():
+            case ProductsLoadedState():
+              return state.products.isEmpty
+                  ? const ProductsEmpty()
+                  : ProductsList(products: state.products);
+            case ProductsFailureState():
               return const ProductsFailure();
             default:
               return const SizedBox.shrink();

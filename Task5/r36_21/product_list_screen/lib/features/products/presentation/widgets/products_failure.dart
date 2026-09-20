@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:product_list_screen/features/products/presentation/cubit/jobs_cubit.dart';
+import 'package:product_list_screen/features/products/presentation/cubit/products_cubit.dart';
 
 class ProductsFailure extends StatelessWidget {
   const ProductsFailure({super.key});
@@ -13,7 +13,7 @@ class ProductsFailure extends StatelessWidget {
         children: [
           const Icon(Icons.error, size: 88),
           Text(
-            (context.read<JobsCubit>().state as JobsFailureState)
+            (context.read<ProductsCubit>().state as ProductsFailureState)
                 .errorMessage,
             style: const TextStyle(fontSize: 22),
           ),
